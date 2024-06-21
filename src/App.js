@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import "./normal.css";
+import "./App.css";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import LoginForm from "./components/login/LoginForm";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
+  const { currentUser } = useContext(AuthContext);
+
+  const RequireAuth = ({ children }) => {
+    return currentUser ? children : <Navigate to="auth/login" />;
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        <Route
+          index
+          exact
+          path="/"
+          element={
+            // <RequireAuth>
+              <Home />
+            // </RequireAuth>
+          }
+        />
+        <Route exact path="auth/login" element={<Login />} />
+        <Route exact path="login" element={<LoginForm />} />
+      </Routes>
     </div>
   );
 }
